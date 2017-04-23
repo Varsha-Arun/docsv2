@@ -3,7 +3,7 @@ page_description: List of supported resources
 page_keywords: Deploy multi containers, microservices, Continuous Integration, Continuous Deployment, CI/CD, testing, automation, pipelines, docker, lxc
 
 # dockerOptions
-This resource type is used to add a list of docker options that can be appended to a docker image. This resource on its own does not mean anything unless used in conjunction with an [image resource](image/). A `dockerOptions` resource can be an `IN` resource for [a manifest job](../jobs/manifest/), or for a [deploy job](../jobs/deploy/).
+This resource type is used to add a list of docker options that can be appended to a docker image. This resource on its own does not mean anything unless used in conjunction with an [image resource](resource-image/). A `dockerOptions` resource can be an `IN` resource for [a manifest job](job-manifest/), or for a [deploy job](job-deploy/).
 
 You can define `dockerOptions` by adding it to `shippable.resources.yml` as shown below:
 
@@ -312,7 +312,7 @@ There are two levels of mapping in dockerOptions.
 
 - __Top level__ : The docker options, which will be mapped to fields that are common to one or more containers in the configuration of the container service. Example: Fields present at root level of [taskDefinition](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html) will be top level options and are common to all containers in [containerDefinitions](http://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#container_definitions).
 
-The prefix `TOP LEVEL ->` denotes that the field will be mapped to one of the top level docker options metioned in  [Provider specific options](dockerOptions/#provider-specific-options).
+The prefix `TOP LEVEL ->` denotes that the field will be mapped to one of the top level docker options metioned in  [Provider specific options](resource-dockeroptions/#provider-specific-options).
 
 | Shippable Tag                     | Amazon ECS                       | Kubernetes                        | GKE                        | TRITON [Remote API v1.21] | DCL             | DDC [ Remote API v1.24] |
 |-------------------------------|----------------------------------|----------------------------|----------------------------|---------------------------|-----------------|-------------------------|
@@ -323,7 +323,7 @@ The prefix `TOP LEVEL ->` denotes that the field will be mapped to one of the to
 | **hostName**                      | hostname                         |  Coming soon...             | TOP LEVEL -> hostname      | Hostname                  | hostname        | Hostname                |
 | **domainName**                    | None                             |   Coming soon...          | TOP LEVEL -> subDomain     | Domainname                | domainname      | Domainname              |
 | **user**                          | user                             | runAsUser                  | runAsUser                  | User                      | user            | User                    |
-| **memorySwap*                    | None                             | None                       | None                       | None                      | memswap_limit   | MemorySwap              |
+| **memorySwap**                    | None                             | None                       | None                       | None                      | memswap_limit   | MemorySwap              |
 | **attachStdin**                   | None                             | None                       | None                       | AttachStdin               | None            | AttachStdin             |
 | **attachStdout**                  | None                             | None                       | None                       | AttachStdOut              | None            | AttachStdOut            |
 | **attachStderr**                  | None                             | None                       | None                       | AttachStderr              | None            | AttachStderr            |
@@ -381,7 +381,7 @@ In the picture above, `deploy-test` takes `dockerOptions-1` as an input. After t
 
 When anything in `dockerOptions` changes, a new version of the resource is created. However, this does not automatically trigger subsequent portions of the pipeline since we have no way of knowing if your code commit changing dockerOptions also changed something else in the pipeline. Triggering dependent jobs automatically might lead to unexpected behavior in this case.
 
-To trigger the rest of the workflow, you will need to manually trigger any jobs that have this resource as an input. You can do this through the UI by right clicking on the dependent job and clicking on `Run`, or by updating an input [trigger resource](../triggers/) for the job.
+To trigger the rest of the workflow, you will need to manually trigger any jobs that have this resource as an input. You can do this through the UI by right clicking on the dependent job and clicking on `Run`, or by updating an input [trigger resource](resource-trigger/) for the job.
 
 ##Provider specific options
 Many options listed above are shared across all providers. For example, every provider will give you a way to control the amount of memory allocated to a container.  On the other hand, some providers have implemented additional features that are unique to their offering.  This section will go over those extra options that are not shared among providers.  Please see the provider docs on the proper way to use these options.
